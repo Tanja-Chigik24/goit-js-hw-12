@@ -35,7 +35,7 @@ async function onSearchFormSubmit(event) {
       timeout: 2000,
       close: true,
     });
-    form.reset;
+    form.reset();
     return;
   }
   galleryEl.innerHTML = '';
@@ -47,15 +47,18 @@ async function onSearchFormSubmit(event) {
       iziToast.show({
         message:
           'Sorry, there are no images matching your search query. Please try again!',
-        color: 'red',
         position: 'topRight',
+        color: 'red',
         timeout: 2000,
         close: true,
       });
       return;
     }
 
-    galleryEl.innerHTML = createGalleryItemMarkup(data.hits);
+    galleryEl.insertAdjacentHTML(
+      'beforeend',
+      createGalleryItemMarkup(data.hits)
+    );
 
     const lightbox = new SimpleLightbox('.js-gallery a', {
       captionPosition: 'bottom',
@@ -72,9 +75,10 @@ async function onSearchFormSubmit(event) {
       }
     } else {
       iziToast.show({
-        position: 'topRight',
         message: "We're sorry, but you've reached the end of search results",
+        position: 'topRight',
         color: 'red',
+        timeout: 2000,
         close: true,
       });
     }
@@ -108,18 +112,20 @@ const onLoadMorePressed = async event => {
     if (data.total === 0) {
       btnmEl.classList.add('d-none');
       loaderEl.classList.add('is-hidden');
-      throw new Error(
-        iziToast.show({
-          position: 'topRight',
-          message:
-            'Sorry, there are no images matching your search query. Please try again!',
-          color: 'red',
-          close: true,
-        })
-      );
+      iziToast.show({
+        message:
+          'Sorry, there are no images matching your search query. Please try again!',
+        position: 'topRight',
+        color: 'red',
+        timeout: 2000,
+        close: true,
+      });
     }
 
-    galleryEl.innerHTML = createGalleryItemMarkup(data.hits);
+    galleryEl.insertAdjacentHTML(
+      'beforeend',
+      createGalleryItemMarkup(data.hits)
+    );
     loaderEl.classList.add('is-hidden');
 
     const lightbox = new SimpleLightbox('.js-gallery a', {
@@ -139,9 +145,10 @@ const onLoadMorePressed = async event => {
     }
     if (imagePage >= totalPages) {
       iziToast.show({
-        position: 'topRight',
         message: "We're sorry, but you've reached the end of search results",
+        position: 'topRight',
         color: 'red',
+        timeout: 2000,
         close: true,
       });
     }
